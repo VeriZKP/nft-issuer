@@ -1,9 +1,0 @@
-{
-  "name": "Soulbound NFT",
-  "description": "This is a non-transferable NFT awarded for achievements.",
-  "image": "https://moccasin-dear-badger-819.mypinata.cloud/ipfs/bafkreidurdqwbqimlzo6z34kjsqndg33vsxmbqmkcafz2i7to2ju7kvqde",
-  "attributes": [
-    { "trait_type": "Slot", "value": 1 },
-    { "trait_type": "Issued By", "value": "University XYZ" }
-  ]
-}
