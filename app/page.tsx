@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { ethers } from "ethers";
-import {} from "../utils/contractInteractions";
-import MintNFT from ".//components/MintNFT";
+import { getInstitution } from "../utils/contractInteractions";
+import MintNFT from "./components/MintNFT";
+import MintedNFTs from "./components/MintedNFT";
 
 export default function Admin() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [signer, setSigner] = useState<ethers.JsonRpcSigner | null>(null);
+  const [institutionName, setInstitutionName] = useState<string | null>("");
   const [activeTab, setActiveTab] = useState("mint");
 
   const connectWallet = async () => {
@@ -15,10 +17,13 @@ export default function Admin() {
       try {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const accounts = await provider.send("eth_requestAccounts", []);
-        const signer = await provider.getSigner();
+        const metamaskSigner = await provider.getSigner();
 
         setWalletAddress(accounts[0]);
-        setSigner(signer);
+        setSigner(metamaskSigner);
+
+        // Fetch institution info after wallet connects
+        fetchInstitution(metamaskSigner);
       } catch (error) {
         console.error("🚨 Connection error:", error);
       }
@@ -30,6 +35,18 @@ export default function Admin() {
   const disconnectWallet = () => {
     setWalletAddress(null);
     setSigner(null);
+    setInstitutionName(""); // Reset institution when disconnecting
+  };
+
+  // ✅ Function to Fetch Institution
+  const fetchInstitution = async (signer: ethers.Signer) => {
+    try {
+      const institution = await getInstitution(signer);
+      setInstitutionName(institution);
+    } catch (error) {
+      console.error("🚨 Error fetching institution:", error);
+      setInstitutionName(null);
+    }
   };
 
   return (
@@ -39,7 +56,9 @@ export default function Admin() {
           Wallet:{" "}
           <span className="font-semibold">
             {walletAddress ? walletAddress : "Not connected"}
+            {institutionName && ` ( ${institutionName} )`}{" "}
           </span>
+          {/* ✅ Show Institution */}
         </p>
         <button
           onClick={walletAddress ? disconnectWallet : connectWallet}
@@ -66,37 +85,13 @@ export default function Admin() {
         </div>
 
         <div className="flex-grow p-6 overflow-y-hidden">
-          {activeTab === "mint" ? <MintNFT /> : <MintedNFTs />}
+          {activeTab === "mint" ? (
+            <MintNFT adminInstitution={institutionName} />
+          ) : (
+            <MintedNFTs />
+          )}
         </div>
       </main>
-    </div>
-  );
-}
-
-function MintedNFTs() {
-  const mintedNFTs = [
-    { id: 1, name: "Soulbound #1", image: "https://via.placeholder.com/150" },
-    { id: 2, name: "Soulbound #2", image: "https://via.placeholder.com/150" },
-  ];
-
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4 text-center">Minted NFTs</h2>
-      <div className="grid grid-cols-2 gap-4">
-        {mintedNFTs.map((nft) => (
-          <div
-            key={nft.id}
-            className="p-4 border rounded-lg shadow-md text-center"
-          >
-            <img
-              src={nft.image}
-              alt={nft.name}
-              className="w-full rounded mb-2"
-            />
-            <p className="font-bold">{nft.name}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
