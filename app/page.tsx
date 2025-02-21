@@ -83,7 +83,7 @@ export default function Admin() {
 
         <div className="flex-grow p-6 overflow-y-hidden">
           {activeTab === "mint" ? (
-            <MintNFT adminInstitution={institutionName} />
+            <MintNFT adminInstitution={institutionName ?? ""} />
           ) : (
             <MintedNFTs />
           )}
