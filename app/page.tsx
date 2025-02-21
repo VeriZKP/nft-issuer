@@ -8,7 +8,6 @@ import MintedNFTs from "./components/MintedNFT";
 
 export default function Admin() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [signer, setSigner] = useState<ethers.JsonRpcSigner | null>(null);
   const [institutionName, setInstitutionName] = useState<string | null>("");
   const [activeTab, setActiveTab] = useState("mint");
 
@@ -20,7 +19,6 @@ export default function Admin() {
         const metamaskSigner = await provider.getSigner();
 
         setWalletAddress(accounts[0]);
-        setSigner(metamaskSigner);
 
         // Fetch institution info after wallet connects
         fetchInstitution(metamaskSigner);
@@ -34,7 +32,6 @@ export default function Admin() {
 
   const disconnectWallet = () => {
     setWalletAddress(null);
-    setSigner(null);
     setInstitutionName(""); // Reset institution when disconnecting
   };
 

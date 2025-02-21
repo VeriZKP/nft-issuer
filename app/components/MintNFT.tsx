@@ -39,11 +39,6 @@ export default function MintNFT({
   const [position, setPosition] = useState("");
   const [name, setName] = useState("");
   const [idNumber, setIdNumber] = useState("");
-  const [ipfsMetadataURI, setIpfsMetadataURI] = useState<string | null>(null);
-  const [gatewayImageURI, setGatewayImageURI] = useState<string | null>(null);
-  const [gatewayMetadataURI, setGatewayMetadataURI] = useState<string | null>(
-    null
-  );
   const [minting, setMinting] = useState(false); // ✅ New: Minting state
 
   const [color1, color2] = getGradientColors(adminInstitution);
@@ -74,12 +69,6 @@ export default function MintNFT({
         const data = await response.json();
         console.log(data);
         if (data.gatewayImageURI && data.gatewayMetadataURI) {
-          setIpfsMetadataURI(data.ipfsMetadataURI);
-          setGatewayImageURI(data.gatewayImageURI);
-          setGatewayMetadataURI(data.gatewayMetadataURI);
-          console.log(data.gatewayMetadataURI);
-
-          // ✅ Step 2: Mint NFT using metadata URI
           await mintNFT(data.ipfsMetadataURI);
         } else {
           console.error("🚨 Error: No metadata or image URL returned");
