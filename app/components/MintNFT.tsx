@@ -8,10 +8,16 @@ const getGradientColors = (institution: string) => {
   switch (institution.toUpperCase()) {
     case "SIT":
       return ["#231F20", "#ED1C24"];
+    case "NUS":
+      return ["#003D7C", "#EF7B00"];
     case "UOB":
       return ["#005EB8", "#ED1C24"];
     case "OCBC":
       return ["#E30713", "#FFFFFF"];
+    case "ByteDance":
+      return ["#325AB4", "#78E6DC"];
+    case "OCBC":
+      return ["#6D36AB", "#31E8D5"];
     default:
       return ["#000000", "#FFFFFF"];
   }
@@ -21,7 +27,11 @@ const getGradientColors = (institution: string) => {
 const getValidPositions = (institution: string) => {
   const positions: Record<string, string[]> = {
     SIT: ["STUDENT", "PROFESSOR"],
+    NUS: ["STUDENT", "PROFESSOR"],
     UOB: ["INTERN", "EMPLOYEE"],
+    OCBC: ["INTERN", "EMPLOYEE"],
+    Bytedance: ["INTERN", "EMPLOYEE"],
+    YouTrip: ["INTERN", "EMPLOYEE"],
   };
   return positions[institution.toUpperCase()] || ["Unknown"];
 };
