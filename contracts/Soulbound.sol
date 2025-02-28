@@ -37,7 +37,7 @@ contract ERC5727SBT is ERC721URIStorage, AccessControl {
     // ===== [1] Contract Deployer Functions ===== //
     // =========================================== //
 
-    // Assign a new institution admin
+    // [1.1] Assign a new institution admin
     function assignAdmin(
         address admin,
         string memory institution
@@ -53,7 +53,7 @@ contract ERC5727SBT is ERC721URIStorage, AccessControl {
         emit AdminAssigned(admin);
     }
 
-    // Revoke an institution admin
+    // [1.2] Revoke an institution admin
     function revokeAdmin(address admin) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(hasRole(ISSUER_ROLE, admin), "Not an admin");
         revokeRole(ISSUER_ROLE, admin);
@@ -69,7 +69,7 @@ contract ERC5727SBT is ERC721URIStorage, AccessControl {
         emit AdminRevoked(admin);
     }
 
-    // Get a list of all institution admins and their institutions
+    // [1.3] Get a list of all institution admins and their institutions
     function getAdmins()
         external
         view
@@ -134,37 +134,35 @@ contract ERC5727SBT is ERC721URIStorage, AccessControl {
         return _adminInstitutions[msg.sender];
     }
 
-    // Get details of all issued tokens
+    // ✅ Get all issued token details for the caller
+    // ✅ Get all issued token details for the caller
     function getAllIssuedTokenDetails()
         external
         view
         onlyRole(ISSUER_ROLE)
         returns (Token[] memory)
     {
+        uint256 totalTokens = _allTokens.length;
+        Token[] memory tempTokens = new Token[](totalTokens);
         uint256 count = 0;
 
-        // Count how many tokens were issued by the caller's organization
-        for (uint256 i = 0; i < _allTokens.length; i++) {
+        for (uint256 i = 0; i < totalTokens; i++) {
+            uint256 tokenId = _allTokens[i];
+
+            // ✅ Filter by the caller (admin issuing tokens or contract owner)
             if (
-                _issuers[_allTokens[i]] == msg.sender ||
+                _issuers[tokenId] == msg.sender ||
                 hasRole(DEFAULT_ADMIN_ROLE, msg.sender)
             ) {
+                tempTokens[count] = _tokens[tokenId];
                 count++;
             }
         }
 
+        // ✅ Trim the array to remove empty slots (Solidity 0.8+ required)
         Token[] memory filteredTokens = new Token[](count);
-        uint256 index = 0;
-
-        // Populate the array with only the caller's issued tokens
-        for (uint256 i = 0; i < _allTokens.length; i++) {
-            if (
-                _issuers[_allTokens[i]] == msg.sender ||
-                hasRole(DEFAULT_ADMIN_ROLE, msg.sender)
-            ) {
-                filteredTokens[index] = _tokens[_allTokens[i]];
-                index++;
-            }
+        for (uint256 j = 0; j < count; j++) {
+            filteredTokens[j] = tempTokens[j];
         }
 
         return filteredTokens;

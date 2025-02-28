@@ -73,13 +73,12 @@ export default function MintNFT({
         formData.append("idNumber", idNumber);
 
         // ✅ Step 1: Upload image to Pinata
-        const response = await fetch("/api/uploadImageToPinata", {
+        const response = await fetch("/api/upload-pinata", {
           method: "POST",
           body: formData,
         });
 
         const data = await response.json();
-        console.log(data);
         if (data.gatewayImageURI && data.gatewayMetadataURI) {
           await mintNFT(data.ipfsMetadataURI);
         } else {
