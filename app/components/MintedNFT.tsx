@@ -5,17 +5,20 @@ import {
 } from "../../utils/contractInteractions";
 import { ethers } from "ethers";
 
+// ✅ Define NFT Metadata Type
+type NFTMetadata = {
+  name: string;
+  id_masked: string;
+  id_hashed: string;
+  institution: string;
+  position: string;
+  image: string;
+};
+
 // ✅ Define NFT Type
 interface NFT {
   walletAddress: string;
-  metadata: {
-    name: string;
-    id_masked: string;
-    id_hashed: string;
-    institution: string;
-    position: string;
-    image: string;
-  } | null;
+  metadata: NFTMetadata | null;
   metadataURI: string;
   tokenId: string;
   revoked: boolean;
@@ -45,17 +48,29 @@ export default function MintedNFTs() {
       const tokens = await getAllIssuedTokens(signer);
 
       // ✅ Create dictionary with metadata set to null initially
-      const tokenDataList: NFT[] = tokens.map((token: any) => ({
-        walletAddress: token.owner,
-        metadata: null, // Will be filled after fetching metadata
-        metadataURI: token.metadataURI, // Store metadata URI for fetching later
-        tokenId: token.tokenId,
-        revoked: token.revoked,
-      }));
+      const tokenDataList: NFT[] = tokens.map(
+        (token: {
+          owner: string;
+          metadataURI: string;
+          tokenId: string;
+          revoked: boolean;
+        }) => ({
+          walletAddress: token.owner,
+          metadata: null, // Will be filled after fetching metadata
+          metadataURI: token.metadataURI, // Store metadata URI for fetching later
+          tokenId: token.tokenId,
+          revoked: token.revoked,
+        })
+      );
 
       // ✅ Extract IPFS Hashes from metadataURIs
-      const ipfsHashes = tokens.map((token: any) =>
-        token.metadataURI.replace("ipfs://", "")
+      const ipfsHashes = tokens.map(
+        (token: {
+          owner: string;
+          metadataURI: string;
+          tokenId: string;
+          revoked: boolean;
+        }) => token.metadataURI.replace("ipfs://", "")
       );
 
       // ✅ Fetch metadata for all tokens in one API call
