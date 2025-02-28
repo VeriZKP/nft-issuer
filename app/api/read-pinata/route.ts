@@ -20,12 +20,24 @@ export async function POST(req: Request) {
 
     for (const ipfsHash of ipfsHashes) {
       try {
-        const data = await pinata.gateways.get(ipfsHash);
+        const response = await pinata.gateways.get(ipfsHash);
 
-        if (data && typeof data.data === "object" && data.data !== null) {
-          const metadata = { ...data.data }; // Clone the metadata object
+        // ✅ Ensure response is correctly formatted
+        if (response && response.data) {
+          let metadata;
 
-          // ✅ Replace `ipfs://` with `https://gateway`
+          // ✅ Check if response.data is a JSON object or a Blob
+          if (typeof response.data === "object") {
+            metadata = { ...response.data };
+          } else if (response.data instanceof Blob) {
+            const textData = await response.data.text();
+            metadata = JSON.parse(textData); // Convert Blob to JSON
+          } else {
+            console.warn(`Unexpected data format for ${ipfsHash}`);
+            continue;
+          }
+
+          // ✅ Replace `ipfs://` with `https://gateway/...`
           if (
             metadata.image &&
             typeof metadata.image === "string" &&
