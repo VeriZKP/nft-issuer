@@ -26,14 +26,23 @@ export async function POST(req: Request) {
         if (response && response.data) {
           let metadata;
 
-          // ✅ Check if response.data is a JSON object or a Blob
+          // ✅ If response.data is an object, use it directly
           if (typeof response.data === "object") {
             metadata = { ...response.data };
-          } else if (response.data instanceof Blob) {
-            const textData = await response.data.text();
-            metadata = JSON.parse(textData); // Convert Blob to JSON
+          }
+          // ✅ If response.data is a string, attempt JSON parsing
+          else if (typeof response.data === "string") {
+            try {
+              metadata = JSON.parse(response.data);
+            } catch (parseError) {
+              console.warn(
+                `❗ Failed to parse JSON for ${ipfsHash}:`,
+                parseError
+              );
+              continue;
+            }
           } else {
-            console.warn(`Unexpected data format for ${ipfsHash}`);
+            console.warn(`❗ Unexpected data format for ${ipfsHash}`);
             continue;
           }
 
