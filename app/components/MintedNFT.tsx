@@ -45,7 +45,7 @@ export default function MintedNFTs() {
       const tokens = await getAllIssuedTokens(signer);
 
       // ✅ Create dictionary with metadata set to null initially
-      const tokenDataList: NFT[] = tokens.map((token) => ({
+      const tokenDataList: NFT[] = tokens.map((token: any) => ({
         walletAddress: token.owner,
         metadata: null, // Will be filled after fetching metadata
         metadataURI: token.metadataURI, // Store metadata URI for fetching later
@@ -54,7 +54,7 @@ export default function MintedNFTs() {
       }));
 
       // ✅ Extract IPFS Hashes from metadataURIs
-      const ipfsHashes = tokens.map((token) =>
+      const ipfsHashes = tokens.map((token: any) =>
         token.metadataURI.replace("ipfs://", "")
       );
 
