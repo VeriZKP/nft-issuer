@@ -5,9 +5,25 @@ import {
 } from "../../utils/contractInteractions";
 import { ethers } from "ethers";
 
+// ✅ Define NFT Type
+interface NFT {
+  walletAddress: string;
+  metadata: {
+    name: string;
+    id_masked: string;
+    id_hashed: string;
+    institution: string;
+    position: string;
+    image: string;
+  } | null;
+  metadataURI: string;
+  tokenId: string;
+  revoked: boolean;
+}
+
 // Function to fetch metadata from IPFS
 export default function MintedNFTs() {
-  const [mintedNFTs, setMintedNFTs] = useState<any[]>([]);
+  const [mintedNFTs, setMintedNFTs] = useState<NFT[]>([]);
   const [loading, setLoading] = useState(false);
   const [revoking, setRevoking] = useState<number | null>(null);
 
@@ -29,7 +45,7 @@ export default function MintedNFTs() {
       const tokens = await getAllIssuedTokens(signer);
 
       // ✅ Create dictionary with metadata set to null initially
-      const tokenDataList = tokens.map((token) => ({
+      const tokenDataList: NFT[] = tokens.map((token) => ({
         walletAddress: token.owner,
         metadata: null, // Will be filled after fetching metadata
         metadataURI: token.metadataURI, // Store metadata URI for fetching later
@@ -54,10 +70,12 @@ export default function MintedNFTs() {
       const metadataList = await response.json();
 
       // ✅ Merge fetched metadata into tokenDataList
-      const updatedTokenDataList = tokenDataList.map((tokenData, index) => ({
-        ...tokenData,
-        metadata: metadataList[index] || null, // Assign metadata if available
-      }));
+      const updatedTokenDataList: NFT[] = tokenDataList.map(
+        (tokenData, index) => ({
+          ...tokenData,
+          metadata: metadataList[index] || null, // Assign metadata if available
+        })
+      );
 
       setMintedNFTs(updatedTokenDataList);
     } catch (error) {
