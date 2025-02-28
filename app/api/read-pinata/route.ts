@@ -22,13 +22,19 @@ export async function POST(req: Request) {
       try {
         const data = await pinata.gateways.get(ipfsHash);
 
-        if (data && data.data) {
+        if (data && typeof data.data === "object" && data.data !== null) {
           const metadata = { ...data.data }; // Clone the metadata object
 
           // ✅ Replace `ipfs://` with `https://gateway`
-          if (metadata.image && metadata.image.startsWith("ipfs://")) {
-            const ipfsCID = metadata.image.split("ipfs://")[1]; // Extract CID
-            metadata.image = `https://${process.env.PINATA_GATEWAY}/ipfs/${ipfsCID}`;
+          if (
+            metadata.image &&
+            typeof metadata.image === "string" &&
+            metadata.image.startsWith("ipfs://")
+          ) {
+            metadata.image = metadata.image.replace(
+              "ipfs://",
+              process.env.PINATA_GATEWAY + "/"
+            );
           }
 
           metadataList.push(metadata); // Store the updated metadata object
