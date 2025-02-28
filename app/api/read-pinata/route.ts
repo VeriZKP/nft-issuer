@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         const data = await pinata.gateways.get(ipfsHash);
 
         if (data && data.data) {
-          let metadata = { ...data.data }; // Clone the metadata object
+          const metadata = { ...data.data }; // Clone the metadata object
 
           // ✅ Replace `ipfs://` with `https://gateway`
           if (metadata.image && metadata.image.startsWith("ipfs://")) {

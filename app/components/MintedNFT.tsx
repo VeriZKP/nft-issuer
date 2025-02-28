@@ -5,8 +5,6 @@ import {
 } from "../../utils/contractInteractions";
 import { ethers } from "ethers";
 
-const PINATA_GATEWAY = process.env.NEXT_PUBLIC_PINATA_GATEWAY;
-
 // Function to fetch metadata from IPFS
 export default function MintedNFTs() {
   const [mintedNFTs, setMintedNFTs] = useState<any[]>([]);
