@@ -200,7 +200,7 @@ export default function MintedNFTs() {
               {/* ✅ Show Revoke Button Only for Active Tokens */}
               {!nft.revoked && (
                 <button
-                  onClick={() => handleRevoke(nft.tokenId)}
+                  onClick={() => handleRevoke(Number(nft.tokenId))}
                   className="mt-2 w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
                   disabled={revoking === nft.tokenId}
                 >
