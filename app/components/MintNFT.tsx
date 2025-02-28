@@ -16,7 +16,7 @@ const getGradientColors = (institution: string) => {
       return ["#E30713", "#FFFFFF"];
     case "ByteDance":
       return ["#325AB4", "#78E6DC"];
-    case "OCBC":
+    case "YouTrip":
       return ["#6D36AB", "#31E8D5"];
     default:
       return ["#000000", "#FFFFFF"];
