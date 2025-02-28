@@ -102,6 +102,9 @@ export const getAllIssuedTokens = async (signer: ethers.Signer) => {
   try {
     const contract = await getContract(signer);
     const tokens = await contract.getAllIssuedTokenDetails();
+
+    console.log(tokens)
+
     return tokens.map((token: any) => ({
       owner: token.owner,
       tokenId: token.tokenId.toString(),
