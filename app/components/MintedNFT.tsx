@@ -202,9 +202,11 @@ export default function MintedNFTs() {
                 <button
                   onClick={() => handleRevoke(Number(nft.tokenId))}
                   className="mt-2 w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-                  disabled={revoking === nft.tokenId}
+                  disabled={revoking === Number(nft.tokenId)}
                 >
-                  {revoking === nft.tokenId ? "Revoking..." : "🚫 Revoke"}
+                  {revoking === Number(nft.tokenId)
+                    ? "Revoking..."
+                    : "🚫 Revoke"}
                 </button>
               )}
             </div>
