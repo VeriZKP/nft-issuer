@@ -54,7 +54,7 @@ export async function POST(req: Request) {
           ) {
             metadata.image = metadata.image.replace(
               "ipfs://",
-              process.env.PINATA_GATEWAY + "/"
+              "https://" + process.env.PINATA_GATEWAY + "/ipfs/"
             );
           }
 
