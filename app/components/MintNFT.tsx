@@ -10,6 +10,8 @@ const getGradientColors = (institution: string) => {
       return ["#231F20", "#ED1C24"];
     case "UOB":
       return ["#005EB8", "#ED1C24"];
+    case "OCBC":
+      return ["#E30713", "#FFFFFF"];
     default:
       return ["#000000", "#FFFFFF"];
   }
