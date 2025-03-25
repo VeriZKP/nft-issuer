@@ -30,7 +30,7 @@ const getValidPositions = (institution: string) => {
     NUS: ["STUDENT", "PROFESSOR"],
     UOB: ["INTERN", "EMPLOYEE"],
     OCBC: ["INTERN", "EMPLOYEE"],
-    Bytedance: ["INTERN", "EMPLOYEE"],
+    ByteDance: ["INTERN", "EMPLOYEE"],
     YouTrip: ["INTERN", "EMPLOYEE"],
   };
   return positions[institution.toUpperCase()] || ["Unknown"];
@@ -48,7 +48,7 @@ export default function MintNFT({
   adminInstitution: string;
 }) {
   const [walletAddress, setWalletAddress] = useState(""); // ✅ New: Wallet Address
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState("STUDENT");
   const [name, setName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [minting, setMinting] = useState(false); // ✅ New: Minting state
