@@ -81,7 +81,7 @@ export default function Admin() {
           </button>
         </div>
 
-        <div className="flex-grow p-6 overflow-y-hidden">
+        <div className="flex-grow p-6 overflow-y-scroll">
           {activeTab === "mint" ? (
             <MintNFT adminInstitution={institutionName ?? ""} />
           ) : (
