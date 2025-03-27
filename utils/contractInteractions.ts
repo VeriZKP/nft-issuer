@@ -31,7 +31,7 @@ const fetchContractAddress = async () => {
 };
 
 const fetchABI = async () => {
-  if (!SoulboundABI) {
+  if (!SoulboundABI || SoulboundABI.length === 0) {
     const storedABI = localStorage.getItem("contractABI");
     if (!storedABI) throw new Error("❌ ABI not found in localStorage");
     SoulboundABI = JSON.parse(storedABI);
@@ -53,6 +53,8 @@ const getContract = async (signer?: ethers.Signer) => {
   const provider = getProvider();
   const contractAddr = await fetchContractAddress(); // Ensure contract address is fetched
   const contractABI = await fetchABI();
+
+  console.log(contractABI);
 
   return new ethers.Contract(
     contractAddr,
