@@ -113,7 +113,7 @@ export default function Admin() {
 
             {loading ? (
               <div className="w-full text-center py-2 font-semibold text-blue-600 animate-pulse">
-                🌀 Hang tight! We're almost there...
+                🌀 Hang tight! We&apos;re almost there...
               </div>
             ) : (
               <button
