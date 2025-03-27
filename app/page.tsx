@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ethers } from "ethers";
+import { InterfaceAbi, ethers } from "ethers";
 import { getInstitution } from "../utils/contractInteractions";
 import MintNFT from "./components/MintNFT";
 import MintedNFTs from "./components/MintedNFT";
@@ -13,7 +13,7 @@ export default function Admin() {
 
   const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [contractAddress, setContractAddress] = useState("");
-  const [contractABI, setContractABI] = useState<any>(null);
+  const [contractABI, setContractABI] = useState<InterfaceAbi>([]);
   const [loading, setLoading] = useState(false);
   const connectWallet = async () => {
     if (window.ethereum) {
