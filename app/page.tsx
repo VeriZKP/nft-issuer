@@ -15,8 +15,6 @@ export default function Admin() {
   const [contractAddress, setContractAddress] = useState("");
   const [contractABI, setContractABI] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState("");
-
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -67,12 +65,9 @@ export default function Admin() {
           localStorage.setItem("contractABI", JSON.stringify(contractABI));
         })(),
       ]);
-
-      setConfirmationMessage("✅ Contract information loaded successfully!");
       setIsPopupOpen(false);
     } catch (err) {
       console.error("Error loading contract:", err);
-      setConfirmationMessage("❌ Failed to load contract.");
     } finally {
       setLoading(false);
     }

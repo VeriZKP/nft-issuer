@@ -1,7 +1,6 @@
-import { ethers } from "ethers";
-// import SoulboundABI from "./Soulbound.json";
+import { InterfaceAbi, ethers } from "ethers";
 
-let SoulboundABI: any | null = null;
+let SoulboundABI: InterfaceAbi | null = null;
 let contractAddress: string | null = null; // Store the contract address after first fetch
 
 // ✅ Function to Fetch Contract Address Securely
