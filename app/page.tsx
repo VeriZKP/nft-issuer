@@ -11,6 +11,12 @@ export default function Admin() {
   const [institutionName, setInstitutionName] = useState<string | null>("");
   const [activeTab, setActiveTab] = useState("mint");
 
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
+  const [contractAddress, setContractAddress] = useState("");
+  const [contractABI, setContractABI] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -46,8 +52,87 @@ export default function Admin() {
     }
   };
 
+  const handlePopupSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contractAddress || !contractABI) return;
+
+    setLoading(true);
+
+    try {
+      // ⏳ Ensure at least 3 seconds of loading
+      await Promise.all([
+        new Promise((resolve) => setTimeout(resolve, 3000)), // 3s wait
+        (async () => {
+          localStorage.setItem("contractAddress", contractAddress);
+          localStorage.setItem("contractABI", JSON.stringify(contractABI));
+        })(),
+      ]);
+
+      setConfirmationMessage("✅ Contract information loaded successfully!");
+      setIsPopupOpen(false);
+    } catch (err) {
+      console.error("Error loading contract:", err);
+      setConfirmationMessage("❌ Failed to load contract.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleABIUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    setContractABI(JSON.parse(text));
+  };
+
   return (
     <div className="flex flex-col h-screen w-screen bg-white">
+      {/* ✅ Fullscreen Popup */}
+      {isPopupOpen && (
+        <div className="absolute flex flex-col inset-0 z-50 bg-[#fef1ea] flex items-center justify-start">
+          <img src="/logo.png" />
+          <form
+            onSubmit={handlePopupSubmit}
+            className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-4"
+          >
+            <h2 className="text-2xl font-bold text-center">
+              Load Smart Contract
+            </h2>
+
+            <input
+              type="text"
+              placeholder="Enter Contract Address"
+              value={contractAddress}
+              onChange={(e) => setContractAddress(e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
+
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleABIUpload}
+              className="w-full p-2 border rounded"
+              required
+            />
+
+            {loading ? (
+              <div className="w-full text-center py-2 font-semibold text-blue-600 animate-pulse">
+                🌀 Hang tight! We're almost there...
+              </div>
+            ) : (
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+              >
+                Submit
+              </button>
+            )}
+          </form>
+        </div>
+      )}
+
+      {/* ✅ Main App Content */}
       <header className="flex items-center justify-between w-full h-[10%] px-16 gap-16 border-b">
         <p className="truncate text-lg max-w-[70%]">
           Wallet:{" "}
