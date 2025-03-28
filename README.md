@@ -8,13 +8,13 @@ Only **authorized institution admins** can mint and revoke these tokens securely
 ---
 
 ## 🚀 Getting Started Locally
-
+https://github.com/VeriZKP/nft-issuer.git
 Follow these steps to run the project on your local machine:
 
 ### 1. Clone the Repository
 Use Git or GitHub Desktop:
 ```bash
-git clone https://github.com/your-repo-name/nft-issuer.git
+git clone https://github.com/VeriZKP/nft-issuer.git
 cd nft-issuer
 ```
 
